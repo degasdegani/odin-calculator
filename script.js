@@ -4,6 +4,7 @@ let secondNumber = null;
 let displayValue = "0";
 let waitingForSecondNumber = false;
 let resultShown = false;
+let errorShown = false;
 
 const display = document.getElementById("display");
 const digitButtons = document.querySelectorAll("[data-digit]");
@@ -41,9 +42,40 @@ function operate(operator, a, b) {
 
 function updateDisplay() {
   display.textContent = displayValue;
+  display.classList.toggle("error", errorShown);
+}
+
+function clearAll() {
+  firstNumber = null;
+  operator = null;
+  secondNumber = null;
+  displayValue = "0";
+  waitingForSecondNumber = false;
+  resultShown = false;
+  errorShown = false;
+  updateDisplay();
+}
+
+function showDivisionError() {
+  firstNumber = null;
+  operator = null;
+  secondNumber = null;
+  displayValue = "Nice try, genius.";
+  waitingForSecondNumber = false;
+  resultShown = false;
+  errorShown = true;
+  updateDisplay();
+}
+
+function roundResult(result) {
+  return Number(result.toFixed(8));
 }
 
 function inputDigit(digit) {
+  if (errorShown) {
+    clearAll();
+  }
+
   if (waitingForSecondNumber) {
     displayValue = digit;
     waitingForSecondNumber = false;
@@ -62,15 +94,28 @@ function inputDigit(digit) {
 function calculate() {
   secondNumber = Number(displayValue);
 
+  if (operator === "/" && secondNumber === 0) {
+    showDivisionError();
+    return;
+  }
+
   const result = operate(operator, firstNumber, secondNumber);
 
-  displayValue = String(result);
+  displayValue = String(roundResult(result));
   updateDisplay();
 }
 
 function chooseOperator(newOperator) {
+  if (errorShown) {
+    return;
+  }
+
   if (operator !== null && !waitingForSecondNumber) {
     calculate();
+
+    if (errorShown) {
+      return;
+    }
   }
 
   firstNumber = Number(displayValue);
@@ -80,23 +125,18 @@ function chooseOperator(newOperator) {
 }
 
 function pressEquals() {
-  if (operator === null || waitingForSecondNumber) {
+  if (errorShown || operator === null || waitingForSecondNumber) {
     return;
   }
 
   calculate();
+
+  if (errorShown) {
+    return;
+  }
+
   operator = null;
   resultShown = true;
-}
-
-function clearAll() {
-  firstNumber = null;
-  operator = null;
-  secondNumber = null;
-  displayValue = "0";
-  waitingForSecondNumber = false;
-  resultShown = false;
-  updateDisplay();
 }
 
 digitButtons.forEach((button) => {

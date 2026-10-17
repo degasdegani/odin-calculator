@@ -30,6 +30,10 @@ body {
   font-size: 36px;
 }
 
+#display.error {
+  font-size: 20px;
+}
+
 .row {
   display: flex;
   gap: 8px;
