@@ -1,6 +1,10 @@
 let firstNumber = null;
 let operator = null;
 let secondNumber = null;
+let displayValue = "0";
+
+const display = document.getElementById("display");
+const digitButtons = document.querySelectorAll("[data-digit]");
 
 function add(a, b) {
   return a + b;
@@ -29,3 +33,24 @@ function operate(operator, a, b) {
     return divide(a, b);
   }
 }
+
+function updateDisplay() {
+  display.textContent = displayValue;
+}
+
+function inputDigit(digit) {
+  if (displayValue === "0") {
+    displayValue = digit;
+  } else {
+    displayValue = displayValue + digit;
+  }
+
+  firstNumber = Number(displayValue);
+  updateDisplay();
+}
+
+digitButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    inputDigit(button.dataset.digit);
+  });
+});
