@@ -11,6 +11,7 @@ const digitButtons = document.querySelectorAll("[data-digit]");
 const operatorButtons = document.querySelectorAll("[data-operator]");
 const equalsButton = document.getElementById("equals");
 const clearButton = document.getElementById("clear");
+const decimalButton = document.getElementById("decimal");
 
 function add(a, b) {
   return a + b;
@@ -43,6 +44,9 @@ function operate(operator, a, b) {
 function updateDisplay() {
   display.textContent = displayValue;
   display.classList.toggle("error", errorShown);
+
+  const typingNumber = !waitingForSecondNumber && !resultShown && !errorShown;
+  decimalButton.disabled = typingNumber && displayValue.includes(".");
 }
 
 function clearAll() {
@@ -91,6 +95,26 @@ function inputDigit(digit) {
   updateDisplay();
 }
 
+function inputDecimal() {
+  if (errorShown) {
+    clearAll();
+  }
+
+  if (waitingForSecondNumber) {
+    displayValue = "0.";
+    waitingForSecondNumber = false;
+  } else if (resultShown) {
+    displayValue = "0.";
+    resultShown = false;
+  } else if (displayValue.includes(".")) {
+    return;
+  } else {
+    displayValue = displayValue + ".";
+  }
+
+  updateDisplay();
+}
+
 function calculate() {
   secondNumber = Number(displayValue);
 
@@ -122,6 +146,7 @@ function chooseOperator(newOperator) {
   operator = newOperator;
   waitingForSecondNumber = true;
   resultShown = false;
+  updateDisplay();
 }
 
 function pressEquals() {
@@ -137,6 +162,7 @@ function pressEquals() {
 
   operator = null;
   resultShown = true;
+  updateDisplay();
 }
 
 digitButtons.forEach((button) => {
@@ -153,3 +179,4 @@ operatorButtons.forEach((button) => {
 
 equalsButton.addEventListener("click", pressEquals);
 clearButton.addEventListener("click", clearAll);
+decimalButton.addEventListener("click", inputDecimal);
