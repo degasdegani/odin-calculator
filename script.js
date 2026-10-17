@@ -13,6 +13,7 @@ const equalsButton = document.getElementById("equals");
 const clearButton = document.getElementById("clear");
 const decimalButton = document.getElementById("decimal");
 const backspaceButton = document.getElementById("backspace");
+const operatorKeys = ["+", "-", "*", "/"];
 
 function add(a, b) {
   return a + b;
@@ -185,6 +186,32 @@ function pressEquals() {
   updateDisplay();
 }
 
+function handleKeyboard(event) {
+  if (event.ctrlKey || event.altKey || event.metaKey) {
+    return;
+  }
+
+  const key = event.key;
+
+  if (key.length === 1 && "0123456789".includes(key)) {
+    inputDigit(key);
+  } else if (key === "." || key === ",") {
+    inputDecimal();
+  } else if (operatorKeys.includes(key)) {
+    chooseOperator(key);
+  } else if (key === "=" || key === "Enter") {
+    pressEquals();
+  } else if (key === "Backspace") {
+    deleteLastDigit();
+  } else if (key === "Escape") {
+    clearAll();
+  } else {
+    return;
+  }
+
+  event.preventDefault();
+}
+
 digitButtons.forEach((button) => {
   button.addEventListener("click", () => {
     inputDigit(button.dataset.digit);
@@ -201,3 +228,4 @@ equalsButton.addEventListener("click", pressEquals);
 clearButton.addEventListener("click", clearAll);
 decimalButton.addEventListener("click", inputDecimal);
 backspaceButton.addEventListener("click", deleteLastDigit);
+document.addEventListener("keydown", handleKeyboard);
