@@ -3,11 +3,13 @@ let operator = null;
 let secondNumber = null;
 let displayValue = "0";
 let waitingForSecondNumber = false;
+let resultShown = false;
 
 const display = document.getElementById("display");
 const digitButtons = document.querySelectorAll("[data-digit]");
 const operatorButtons = document.querySelectorAll("[data-operator]");
 const equalsButton = document.getElementById("equals");
+const clearButton = document.getElementById("clear");
 
 function add(a, b) {
   return a + b;
@@ -45,6 +47,9 @@ function inputDigit(digit) {
   if (waitingForSecondNumber) {
     displayValue = digit;
     waitingForSecondNumber = false;
+  } else if (resultShown) {
+    displayValue = digit;
+    resultShown = false;
   } else if (displayValue === "0") {
     displayValue = digit;
   } else {
@@ -71,11 +76,27 @@ function chooseOperator(newOperator) {
   firstNumber = Number(displayValue);
   operator = newOperator;
   waitingForSecondNumber = true;
+  resultShown = false;
 }
 
 function pressEquals() {
+  if (operator === null || waitingForSecondNumber) {
+    return;
+  }
+
   calculate();
   operator = null;
+  resultShown = true;
+}
+
+function clearAll() {
+  firstNumber = null;
+  operator = null;
+  secondNumber = null;
+  displayValue = "0";
+  waitingForSecondNumber = false;
+  resultShown = false;
+  updateDisplay();
 }
 
 digitButtons.forEach((button) => {
@@ -91,3 +112,4 @@ operatorButtons.forEach((button) => {
 });
 
 equalsButton.addEventListener("click", pressEquals);
+clearButton.addEventListener("click", clearAll);
