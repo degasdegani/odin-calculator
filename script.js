@@ -12,6 +12,7 @@ const operatorButtons = document.querySelectorAll("[data-operator]");
 const equalsButton = document.getElementById("equals");
 const clearButton = document.getElementById("clear");
 const decimalButton = document.getElementById("decimal");
+const backspaceButton = document.getElementById("backspace");
 
 function add(a, b) {
   return a + b;
@@ -115,6 +116,25 @@ function inputDecimal() {
   updateDisplay();
 }
 
+function deleteLastDigit() {
+  if (errorShown) {
+    clearAll();
+    return;
+  }
+
+  if (waitingForSecondNumber || resultShown) {
+    return;
+  }
+
+  displayValue = displayValue.slice(0, -1);
+
+  if (displayValue === "") {
+    displayValue = "0";
+  }
+
+  updateDisplay();
+}
+
 function calculate() {
   secondNumber = Number(displayValue);
 
@@ -180,3 +200,4 @@ operatorButtons.forEach((button) => {
 equalsButton.addEventListener("click", pressEquals);
 clearButton.addEventListener("click", clearAll);
 decimalButton.addEventListener("click", inputDecimal);
+backspaceButton.addEventListener("click", deleteLastDigit);
