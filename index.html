@@ -7,6 +7,44 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="calculator">
+      <div id="display">0</div>
+
+      <div class="row">
+        <button type="button" id="clear" class="wide">Clear</button>
+        <button type="button" id="backspace" aria-label="Backspace">
+          &larr;
+        </button>
+        <button type="button" data-operator="/">&divide;</button>
+      </div>
+
+      <div class="row">
+        <button type="button" data-digit="7">7</button>
+        <button type="button" data-digit="8">8</button>
+        <button type="button" data-digit="9">9</button>
+        <button type="button" data-operator="*">&times;</button>
+      </div>
+
+      <div class="row">
+        <button type="button" data-digit="4">4</button>
+        <button type="button" data-digit="5">5</button>
+        <button type="button" data-digit="6">6</button>
+        <button type="button" data-operator="-">&minus;</button>
+      </div>
+
+      <div class="row">
+        <button type="button" data-digit="1">1</button>
+        <button type="button" data-digit="2">2</button>
+        <button type="button" data-digit="3">3</button>
+        <button type="button" data-operator="+">+</button>
+      </div>
+
+      <div class="row">
+        <button type="button" data-digit="0" class="wide">0</button>
+        <button type="button" id="decimal">.</button>
+        <button type="button" id="equals">=</button>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
