@@ -54,12 +54,6 @@ function inputDigit(digit) {
   updateDisplay();
 }
 
-function chooseOperator(newOperator) {
-  firstNumber = Number(displayValue);
-  operator = newOperator;
-  waitingForSecondNumber = true;
-}
-
 function calculate() {
   secondNumber = Number(displayValue);
 
@@ -67,6 +61,21 @@ function calculate() {
 
   displayValue = String(result);
   updateDisplay();
+}
+
+function chooseOperator(newOperator) {
+  if (operator !== null && !waitingForSecondNumber) {
+    calculate();
+  }
+
+  firstNumber = Number(displayValue);
+  operator = newOperator;
+  waitingForSecondNumber = true;
+}
+
+function pressEquals() {
+  calculate();
+  operator = null;
 }
 
 digitButtons.forEach((button) => {
@@ -81,4 +90,4 @@ operatorButtons.forEach((button) => {
   });
 });
 
-equalsButton.addEventListener("click", calculate);
+equalsButton.addEventListener("click", pressEquals);
