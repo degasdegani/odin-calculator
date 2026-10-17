@@ -2,9 +2,12 @@ let firstNumber = null;
 let operator = null;
 let secondNumber = null;
 let displayValue = "0";
+let waitingForSecondNumber = false;
 
 const display = document.getElementById("display");
 const digitButtons = document.querySelectorAll("[data-digit]");
+const operatorButtons = document.querySelectorAll("[data-operator]");
+const equalsButton = document.getElementById("equals");
 
 function add(a, b) {
   return a + b;
@@ -39,13 +42,30 @@ function updateDisplay() {
 }
 
 function inputDigit(digit) {
-  if (displayValue === "0") {
+  if (waitingForSecondNumber) {
+    displayValue = digit;
+    waitingForSecondNumber = false;
+  } else if (displayValue === "0") {
     displayValue = digit;
   } else {
     displayValue = displayValue + digit;
   }
 
+  updateDisplay();
+}
+
+function chooseOperator(newOperator) {
   firstNumber = Number(displayValue);
+  operator = newOperator;
+  waitingForSecondNumber = true;
+}
+
+function calculate() {
+  secondNumber = Number(displayValue);
+
+  const result = operate(operator, firstNumber, secondNumber);
+
+  displayValue = String(result);
   updateDisplay();
 }
 
@@ -54,3 +74,11 @@ digitButtons.forEach((button) => {
     inputDigit(button.dataset.digit);
   });
 });
+
+operatorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    chooseOperator(button.dataset.operator);
+  });
+});
+
+equalsButton.addEventListener("click", calculate);
